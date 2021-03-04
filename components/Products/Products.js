@@ -5,7 +5,21 @@ class Products {
         this.labelRemove = 'Удалить из корзины';
     }
     
+    handleSetLocationStorage(element, id){
+        const { pushProduct, products } = localStrorageUtil.putProducts(id);
+
+        if(pushProduct) {
+          element.classList.add(this.classNameActive);
+          element.innerHTML = this.labelRemove;
+        } else {
+          element.classList.remove(this.classNameActive);
+          element.innerHTML = this.labelAdd;
+        }
+
+        HeaderPage.render(products.length);
+    }
     render(){
+
         const productsStore = localStrorageUtil.getProducts();
         let htmlCatalog = ''; 
         CATALOG.forEach(({id, name, price, img}) => {
@@ -26,7 +40,9 @@ class Products {
                     <span class="products-element__price">  
                         🔥 ${price.toLocaleString()} USD
                     </span>
-                    <button class="products-element__btn ${activeClass}"> ${activeText} </button>
+                    <button class="products-element__btn ${activeClass}" onclick="productsPage.handleSetLocationStorage(this, '${id}');"> 
+                        ${activeText} 
+                    </button>
                   </li>
                 `;
         });
